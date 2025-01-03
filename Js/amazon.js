@@ -1,4 +1,8 @@
+import {cart , addToCart} from "../data/cart.js"
+import {products} from "../data/products.js"
+
 let productsHtml = "";
+
 
 products.forEach((product) => {
   productsHtml += `
@@ -24,7 +28,7 @@ products.forEach((product) => {
       </div>
 
       <div class="product-quantity-container">
-        <select>
+        <select class="select">
           <option selected value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -45,7 +49,7 @@ products.forEach((product) => {
         Added
       </div>
 
-      <button class="add-to-cart-button button-primary js-add-to-cart" data-product-id="${product.id}">
+      <button class="add-to-cart-button button-primary js-add-to-cart" data-product-id="${product.id}" data-product='${JSON.stringify(product)}'>
         Add to Cart
       </button>
     </div>`;
@@ -55,34 +59,43 @@ document.querySelector(".js-products-grid").innerHTML = productsHtml;
 
 
 
-document.querySelectorAll(".js-add-to-cart").forEach((button) => {
-  button.addEventListener("click", () => {
-    let productId = button.dataset.productId;
-
-    let matchingItem;
-
-    cart.forEach((item) => {
-      if (productId === item.productId) {
-        matchingItem = item;
-      }
+function updateCartQuantity(){
+  let cartQuantity = 0;
+    cart.forEach((cartItem) => {
+      cartQuantity += cartItem.quantity;
     });
+    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+}
 
-    if (matchingItem) {
-      matchingItem.quantity += 1;
-    } else {
-      cart.push({
-        productId: productId,
-        quantity: 1,
-      });
+document.querySelectorAll(".js-add-to-cart").forEach((button) => {
+  let fadeOutTimer; // Declare a timer variable to manage the timeout
+
+  button.addEventListener("click", () => {
+    const productId = button.dataset.productId;
+    const productContainer = button.closest(".product-container");
+    const select = productContainer.querySelector(".select");
+
+    // Retrieve the selected quantity
+    const selectedQuantity = parseInt(select.value, 10);
+
+    // Add to cart with the selected quantity
+    addToCart(productId, selectedQuantity);
+
+    // Update cart quantity display
+    updateCartQuantity();
+
+    // Display the "Added to Cart" message
+    const addedToCartElement = productContainer.querySelector(".added-to-cart");
+    addedToCartElement.style.opacity = "1";
+    addedToCartElement.style.transition = "opacity 0.3s ease";
+
+    // Clear and reset fade-out timer for "Added to Cart" message
+    if (fadeOutTimer) {
+      clearTimeout(fadeOutTimer);
     }
 
-    let cartQuantity = 0; // Declare the variable here
-    cart.forEach((item) => {
-      cartQuantity += item.quantity; // Update the total quantity
-    });
-
-    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity
-
-
+    fadeOutTimer = setTimeout(() => {
+      addedToCartElement.style.opacity = "0";
+    }, 2000);
   });
 });
