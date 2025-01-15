@@ -1,6 +1,6 @@
-import {cart , addToCart} from "../data/cart.js"
+import {cart , addToCart, updateCartQuantity} from "../data/cart.js"
 import {products} from "../data/products.js"
-
+import {formatCurrency} from "./utils/money.js";
 let productsHtml = "";
 
 
@@ -24,7 +24,7 @@ products.forEach((product) => {
       </div>
 
       <div class="product-price">
-        ${(product.priceCents / 100).toFixed(2)}
+        $${(formatCurrency(product.priceCents))}
       </div>
 
       <div class="product-quantity-container">
@@ -59,14 +59,12 @@ document.querySelector(".js-products-grid").innerHTML = productsHtml;
 
 
 
-function updateCartQuantity(){
-  let cartQuantity = 0;
-    cart.forEach((cartItem) => {
-      cartQuantity += cartItem.quantity;
-    });
-    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
-}
+updateCartQuantity()
+  
+  document.querySelector(".js-cart-quantity").innerHTML = updateCartQuantity()
 
+
+updateCartQuantity()
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   let fadeOutTimer; // Declare a timer variable to manage the timeout
 
@@ -82,7 +80,7 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
     addToCart(productId, selectedQuantity);
 
     // Update cart quantity display
-    updateCartQuantity();
+    document.querySelector(".js-cart-quantity").innerHTML = updateCartQuantity()
 
     // Display the "Added to Cart" message
     const addedToCartElement = productContainer.querySelector(".added-to-cart");
