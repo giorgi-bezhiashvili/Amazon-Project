@@ -1,8 +1,8 @@
-import {cart , addToCart, updateCartQuantity} from "../data/cart.js"
-import {products} from "../data/products.js"
-import {formatCurrency} from "./utils/money.js";
-let productsHtml = "";
+import { cart, addToCart, updateCartQuantity } from "../data/cart.js";
+import { products } from "../data/products.js";
+import { formatCurrency } from "./utils/money.js";
 
+let productsHtml = "";
 
 products.forEach((product) => {
   productsHtml += `
@@ -16,15 +16,14 @@ products.forEach((product) => {
       </div>
 
       <div class="product-rating-container">
-        <img class="product-rating-stars"
-          src="images/ratings/rating-${product.rating.stars * 10}.png">
+        <img class="product-rating-stars" src="${product.getStarsUrl()}">
         <div class="product-rating-count link-primary">
           ${product.rating.count}
         </div>
       </div>
 
       <div class="product-price">
-        $${(formatCurrency(product.priceCents))}
+        ${product.getPrice()}
       </div>
 
       <div class="product-quantity-container">
@@ -57,14 +56,10 @@ products.forEach((product) => {
 
 document.querySelector(".js-products-grid").innerHTML = productsHtml;
 
+updateCartQuantity();
 
+document.querySelector(".js-cart-quantity").innerHTML = updateCartQuantity();
 
-updateCartQuantity()
-  
-  document.querySelector(".js-cart-quantity").innerHTML = updateCartQuantity()
-
-
-updateCartQuantity()
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   let fadeOutTimer; // Declare a timer variable to manage the timeout
 
@@ -80,7 +75,7 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
     addToCart(productId, selectedQuantity);
 
     // Update cart quantity display
-    document.querySelector(".js-cart-quantity").innerHTML = updateCartQuantity()
+    document.querySelector(".js-cart-quantity").innerHTML = updateCartQuantity();
 
     // Display the "Added to Cart" message
     const addedToCartElement = productContainer.querySelector(".added-to-cart");
