@@ -43,7 +43,7 @@ cart.forEach((cartItem) => {
                         <img class="product-image" src="${matchingProduct.image}" alt="${matchingProduct.name}">
                         <div class="cart-item-details">
                             <div class="product-name">${matchingProduct.name}</div>
-                            <div class="product-price">$${formatCurrency(matchingProduct.priceCents)}</div>
+                            <div class="product-price">$${matchingProduct.getPrice()}</div>
                             <div class="product-quantity">
                                 <span>
                                     Quantity: <span class="quantity-label">${cartItem.quantity}</span>
@@ -97,7 +97,7 @@ function deliveryOptionsHTML(matchingProduct, cartItem) {
 // Update the DOM
 orderSummary.innerHTML = cartSummaryHTML;
 
-// Event listener for quantity input changes
+// Event listener to quantity input changes
 document.querySelectorAll(".quantity-input").forEach(input => {
     input.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
@@ -126,7 +126,7 @@ document.querySelectorAll(".quantity-input").forEach(input => {
     });
 });
 
-// Event listener for delete links
+// Event listener to delete links
 document.querySelectorAll(".js-delete-link").forEach(link => {
     link.addEventListener("click", function () {
         const productId = this.dataset.productId;
@@ -137,7 +137,7 @@ document.querySelectorAll(".js-delete-link").forEach(link => {
     });
 });
 
-// Event listener for update links
+// Event listener to update links
 document.querySelectorAll(".update-quantity-link").forEach(link => {
     link.addEventListener("click", function () {
         const cartItemContainer = this.closest(".cart-item-container");
@@ -147,7 +147,7 @@ document.querySelectorAll(".update-quantity-link").forEach(link => {
     });
 });
 
-// Event listener for save links
+// Event listener to save links
 document.querySelectorAll(".save-quantity-link").forEach(saveElem => {
     saveElem.addEventListener("click", function () {
         const cartItemContainer = this.closest(".cart-item-container");
