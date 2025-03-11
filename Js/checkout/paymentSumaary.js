@@ -20,7 +20,7 @@ export function renderPaymentSummary(){
     const totalBeforeTaxCents = productPriceCents + shippingPriceCents
     const taxCents = (totalBeforeTaxCents * 10  / 100)
     const totalCents = totalBeforeTaxCents + taxCents
-    console.log(taxCents);
+   
     
     const paymentSummaryHtml = `
     <div class="payment-summary">
